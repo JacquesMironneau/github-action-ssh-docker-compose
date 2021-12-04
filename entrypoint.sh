@@ -22,7 +22,7 @@ eval `ssh-agent -s`
 
 ssh-add <(echo "$SSH_PRIVATE_KEY")
 
-remote_command="set -e ; log() { echo '>> [remote]' \$@ ; } ; cleanup() { log 'Removing workspace...'; rm -rf \"\/home/debian/workspace/!(data)\" || true ; } ; log 'Creating workspace directory...' ; ls /home/debian ; mkdir -p \"\/home/debian/workspace\" ; trap cleanup EXIT ; log 'Unpacking workspace...' ; tar -C \"\/home/debian/workspace\" -xjv ; log 'Launching docker-compose...' ; cd \"\/home/debian/workspace\" ; docker-compose -f \"$DOCKER_COMPOSE_FILENAME\" -p \"$DOCKER_COMPOSE_PREFIX\" up -d --remove-orphans --build --force-recreate"
+remote_command="set -e ; log() { echo '>> [remote]' \$@ ; } ; cleanup() { log 'Removing workspace...'; rm -rf \"/home/debian/workspace/!(data)\" || true ; } ; log 'Creating workspace directory...' ; ls /home/debian ; mkdir -p \"/home/debian/workspace\" ; trap cleanup EXIT ; log 'Unpacking workspace...' ; tar -C \"/home/debian/workspace\" -xjv ; log 'Launching docker-compose...' ; cd '/home/debian/workspace' ; docker-compose -f \"$DOCKER_COMPOSE_FILENAME\" -p \"$DOCKER_COMPOSE_PREFIX\" up -d --remove-orphans --build --force-recreate"
 
 echo ">> [local] Connecting to remote host."
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
