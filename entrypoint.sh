@@ -25,7 +25,10 @@ ssh-add <(echo "$SSH_PRIVATE_KEY")
 remote_command="set -e ; log() { echo '>> [remote]' \$@ ; } ; cleanup() { log 'Removing workspace...'; rm -rf \"/home/debian/workspace/!(data)\" || true ; log 'Removing tar'; rm -rf /home/debian/workspace.tar.bz2 ;} ; log 'Creating workspace directory...' ; ls /home/debian ; mkdir -p \"/home/debian/workspace\" ; trap cleanup EXIT ; log 'Unpacking workspace...' ; tar -C \"/home/debian/workspace\" -xjv /home/debian/workspace.tar.bz2 ; log 'Launching docker-compose...' ; cd '/home/debian/workspace' ; docker-compose -f \"$DOCKER_COMPOSE_FILENAME\" -p \"$DOCKER_COMPOSE_PREFIX\" up -d --remove-orphans --build --force-recreate"
 
 echo ">> [local] Connecting to remote host."
-scp -P $SSH_PORT /tmp/workspace.tar.bz2  "$SSH_USER@$SSH_HOST":/home/debian/
+
+echo "$SSH_PRIVATE_KEY" > key.pem
+chmod 400 key.pem
+scp -i key.pem -P $SSH_PORT /tmp/workspace.tar.bz2  "$SSH_USER@$SSH_HOST":/home/debian/
 
 
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
